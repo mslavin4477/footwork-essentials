@@ -151,12 +151,17 @@ const EmailForm = ({ variant = "hero" }: { variant?: "hero" | "section" }) => {
         }),
       });
 
-      if (!res.ok) throw new Error("Subscription failed");
+      if (!res.ok) {
+        const errBody = await res.text();
+        console.error("Kit API error:", res.status, errBody);
+        throw new Error(errBody || "Subscription failed");
+      }
       setStatus("success");
-    } catch {
-      setErrorMsg("Something went wrong. Please try again.");
+    } catch (err: any) {
+      console.error("Form submission error:", err);
+      setErrorMsg(err?.message || "Something went wrong. Please try again.");
       setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
+      setTimeout(() => setStatus("idle"), 4000);
     }
   };
 
