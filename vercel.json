@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/course", "destination": "/index.html" },
+    { "source": "/striking", "destination": "/index.html" }
+  ]
+}

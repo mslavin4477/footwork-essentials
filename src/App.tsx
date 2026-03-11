@@ -17,6 +17,8 @@ import {
   Loader2,
 } from "lucide-react";
 import logo from "./assets/logo.png";
+import CoursePage from "./CoursePage";
+import StrikingPage from "./StrikingPage";
 
 /* ───────────────────── NAVBAR ───────────────────── */
 
@@ -875,9 +877,9 @@ const Footer = () => (
   </footer>
 );
 
-/* ───────────────────── APP ───────────────────── */
+/* ───────────────────── LANDING PAGE ───────────────────── */
 
-function App() {
+function LandingPage() {
   return (
     <main className="font-body bg-background text-foreground overflow-x-hidden">
       <Navbar />
@@ -889,6 +891,22 @@ function App() {
       <Footer />
     </main>
   );
+}
+
+/* ───────────────────── APP ───────────────────── */
+
+function App() {
+  const path = window.location.pathname;
+
+  if (path === "/course") {
+    return <CoursePage />;
+  }
+
+  if (path === "/striking") {
+    return <StrikingPage />;
+  }
+
+  return <LandingPage />;
 }
 
 export default App;
