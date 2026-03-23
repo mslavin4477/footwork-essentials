@@ -1,9 +1,11 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
   FolderDown,
   Swords,
+  X,
 } from "lucide-react";
 import logo from "./assets/logo.png";
 
@@ -69,9 +71,7 @@ const AccessCard = () => (
         className="max-w-lg mx-auto"
       >
         <a
-          href="https://drive.google.com/drive/folders/1lZ130bSvIqkZ9hpUc5ftSCGcw1bYOnRR"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="https://www.corysandhagenmma.com/p/foot-work-essentials?coupon_code=FREEFOOTWORK&product_id=5242361"
           className="group block relative p-8 bg-card border border-[hsl(var(--primary)/.3)] rounded-sm shadow-[0_0_40px_hsl(210_80%_50%_/_0.15)] hud-corner hover:border-[hsl(var(--primary)/.6)] hover:shadow-[0_0_60px_hsl(210_80%_50%_/_0.25)] transition-all duration-300"
         >
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
@@ -82,15 +82,15 @@ const AccessCard = () => (
             </div>
 
             <h2 className="font-display text-2xl sm:text-3xl mb-3">
-              WATCH THE FULL COURSE
+              CLAIM YOUR FREE COURSE
             </h2>
 
             <p className="text-sm text-[hsl(var(--muted-foreground))] mb-6">
-              All 7 modules in one place. Stream or download.
+              7 modules. Almost two hours of instruction. Yours for free.
             </p>
 
             <div className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(210_70%_40%)] text-white font-semibold rounded-sm shadow-[0_0_30px_hsl(210_80%_50%_/_0.3)] group-hover:shadow-[0_0_50px_hsl(210_80%_50%_/_0.5)] transition-all duration-300 btn-shimmer clip-angular-small">
-              Open Course Videos
+              Get Instant Access — Free
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -205,6 +205,83 @@ const CourseFooter = () => (
   </footer>
 );
 
+/* ───────────────────── FLOATING BOTTOM BAR ───────────────────── */
+
+const StrikingBottomBar = () => {
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    // Show after 3s delay
+    const timer = setTimeout(() => {
+      if (!dismissed) setVisible(true);
+    }, 3000);
+
+    // Hide when the upsell section is in view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(false);
+      },
+      { threshold: 0.3 }
+    );
+
+    // Observe the upsell section by ID
+    const target = document.getElementById("striking-upsell");
+    if (target) observer.observe(target);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [dismissed]);
+
+  if (dismissed) return null;
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="fixed bottom-0 left-0 right-0 z-50"
+        >
+          <div className="bg-[hsl(220_15%_7%/.95)] backdrop-blur-md border-t border-[hsl(0_72%_51%_/_0.3)] shadow-[0_-4px_30px_hsl(0_72%_51%_/_0.15)]">
+            <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="hidden sm:flex items-center justify-center w-8 h-8 bg-[hsl(0_72%_51%_/_0.15)] border border-[hsl(0_72%_51%_/_0.3)] rounded-sm flex-shrink-0">
+                  <Swords className="w-4 h-4 text-[hsl(0_72%_51%)]" />
+                </div>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                  Level up your striking
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <a
+                  href="/striking"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[hsl(0_72%_51%)] to-[hsl(15_80%_45%)] text-white text-sm font-semibold rounded-sm shadow-[0_0_20px_hsl(0_72%_51%_/_0.3)] hover:shadow-[0_0_30px_hsl(0_72%_51%_/_0.5)] transition-all btn-shimmer"
+                >
+                  Check It Out
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => setDismissed(true)}
+                  className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+                  aria-label="Dismiss"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 /* ───────────────────── PAGE ───────────────────── */
 
 export default function CoursePage() {
@@ -213,8 +290,11 @@ export default function CoursePage() {
       <CourseNavbar />
       <CourseHero />
       <AccessCard />
-      <StrikingUpsell />
+      <div id="striking-upsell">
+        <StrikingUpsell />
+      </div>
       <CourseFooter />
+      <StrikingBottomBar />
     </main>
   );
 }
