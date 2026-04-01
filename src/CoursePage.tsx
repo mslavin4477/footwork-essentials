@@ -71,7 +71,7 @@ const AccessCard = () => (
         className="max-w-lg mx-auto"
       >
         <a
-          href="https://www.corysandhagenmma.com/p/foot-work-essentials?coupon_code=FREEFOOTWORK&product_id=5242361"
+          href="https://www.corysandhagenmma.com/purchase?product_id=5242361&coupon_code=FREEFOOTWORK"
           className="group block relative p-8 bg-card border border-[hsl(var(--primary)/.3)] rounded-sm shadow-[0_0_40px_hsl(210_80%_50%_/_0.15)] hud-corner hover:border-[hsl(var(--primary)/.6)] hover:shadow-[0_0_60px_hsl(210_80%_50%_/_0.25)] transition-all duration-300"
         >
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
