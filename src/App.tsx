@@ -159,6 +159,14 @@ const EmailForm = ({ variant = "hero" }: { variant?: "hero" | "section" }) => {
         throw new Error(errBody || "Subscription failed");
       }
       setStatus("success");
+      try {
+        (window as Window & { fbq?: (...a: unknown[]) => void }).fbq?.("track", "Lead", {
+          content_name: "Footwork Essentials",
+          content_category: "free course",
+        });
+      } catch {
+        /* pixel blocked or not loaded */
+      }
     } catch (err: any) {
       console.error("Form submission error:", err);
       setErrorMsg(err?.message || "Something went wrong. Please try again.");
